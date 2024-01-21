@@ -19,6 +19,7 @@ function GameBoard() {
   const [won, setWon] = useState(0);
   const [timer, setTimer] = useState<number>(-1);
   const [loading, setLoading] = useState(true);
+  console.log(drinksArray);
 
   async function NewGame() {
     try {
