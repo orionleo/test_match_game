@@ -24,9 +24,9 @@ function GameBoard() {
   async function NewGame() {
     setLoading(true);
     const res = await axios.get('/api/fetchData')
-    // const data = res.data.data as Drink[]
-    // const randomOrderArray = data.sort(() => 0.5 - Math.random());
-    const randomOrderArray = Data.sort(() => 0.5 - Math.random());
+    const data = res.data.data as Drink[]
+    const randomOrderArray = data.sort(() => 0.5 - Math.random());
+    // const randomOrderArray = Data.sort(() => 0.5 - Math.random());
     setDrinksArray(randomOrderArray);
     setMoves(0);
     setFirstCard(null);
