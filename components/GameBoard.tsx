@@ -23,27 +23,25 @@ function GameBoard() {
   async function NewGame() {
     try {
       setLoading(true);
-      const res = await axios.get('/api/fetchData')
-      const data = res.data.data as Drink[]
+      const res = await axios.get('/api/fetchData');
+      const data = res.data.data as Drink[];
       const randomOrderArray = data.sort(() => 0.5 - Math.random());
-      // const randomOrderArray = Data.sort(() => 0.5 - Math.random());
       setDrinksArray(randomOrderArray);
       setMoves(0);
       setFirstCard(null);
       setSecondCard(null);
       setWon(0);
       setTimer(-1);
-      
     } catch (error) {
+      console.error('Error fetching data:', error);
       setDrinksArray([]);
-    }
-    finally {
+    } finally {
       setTimeout(() => {
         setLoading(false);
-      }, 500)
+      }, 500);
     }
-
   }
+
 
   //all the functions needed
   function handleSelectedCards(item: Drink) {
@@ -126,23 +124,21 @@ function GameBoard() {
       </div>
 
       {!loading ? (<div className="grid m-auto mt-[1rem] grid-cols-[repeat(4,9rem)] place-items-center gap-y-[2rem] gap-x-8">
-        {
-
-          drinksArray.map((item) => {
-            return (
-              item !== undefined && <Card
-                item={item}
-                key={item.id}
-                handleSelectedCards={handleSelectedCards}
-                toggled={
-                  item === firstCard ||
-                  item === secondCard ||
-                  item.matched === true
-                }
-                stopFlip={stopFlip}
-              />
-            )
-          })
+        {drinksArray.map((item) => {
+          return (
+            item !== undefined && <Card
+              item={item}
+              key={item.id}
+              handleSelectedCards={handleSelectedCards}
+              toggled={
+                item === firstCard ||
+                item === secondCard ||
+                item.matched === true
+              }
+              stopFlip={stopFlip}
+            />
+          )
+        })
         }
       </div>) : (<div className=" mx-[10px] flex flex-col items-center justify-center rounded-lg min-h-[50vh] text-white p-4">
         <div className="text-center">
