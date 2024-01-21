@@ -1,9 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Data from "@/data";
 import Card from "./Card";
+import Data from "@/data"
+import axios from "axios";
 
-interface Item {
+interface Drink {
   id: number;
   name: string;
   img: string;
@@ -11,19 +12,22 @@ interface Item {
 }
 function GameBoard() {
   //All the variables/states needed/maintained
-  const [cardsArray, setCardsArray] = useState<typeof Data>([]);
+  const [drinksArray, setDrinksArray] = useState<Drink[]>([]);
   const [moves, setMoves] = useState(0);
-  const [firstCard, setFirstCard] = useState<Item | null>(null);
-  const [secondCard, setSecondCard] = useState<Item | null>(null);
+  const [firstCard, setFirstCard] = useState<Drink | null>(null);
+  const [secondCard, setSecondCard] = useState<Drink | null>(null);
   const [stopFlip, setStopFlip] = useState(false);
   const [won, setWon] = useState(0);
   const [timer, setTimer] = useState<number>(-1);
   const [loading, setLoading] = useState(true);
 
-  function NewGame() {
+  async function NewGame() {
     setLoading(true);
+    const res = await axios.get('/api/fetchData')
+    // const data = res.data.data as Drink[]
+    // const randomOrderArray = data.sort(() => 0.5 - Math.random());
     const randomOrderArray = Data.sort(() => 0.5 - Math.random());
-    setCardsArray(randomOrderArray);
+    setDrinksArray(randomOrderArray);
     setMoves(0);
     setFirstCard(null);
     setSecondCard(null);
@@ -35,7 +39,7 @@ function GameBoard() {
   }
 
   //all the functions needed
-  function handleSelectedCards(item: Item) {
+  function handleSelectedCards(item: Drink) {
     if (moves === 0 && firstCard === null) {
 
       setTimer(0);
@@ -54,11 +58,18 @@ function GameBoard() {
   }
 
   //All the useEffects needed
+
+  useEffect(() => {
+
+    NewGame();
+  }, []);
+
+
   useEffect(() => {
     if (firstCard && secondCard) {
       setStopFlip(true);
       if (firstCard.name === secondCard.name) {
-        setCardsArray((prevArray) => {
+        setDrinksArray((prevArray) => {
           return prevArray.map((card) => {
             if (card.name === firstCard.name) {
               return { ...card, matched: true };
@@ -97,9 +108,7 @@ function GameBoard() {
     };
   }, [timer, won]);
 
-  useEffect(() => {
-    NewGame();
-  }, []);
+
 
   return (
     <div className="flex flex-col">
@@ -113,19 +122,22 @@ function GameBoard() {
       {!loading ? (<div className="grid m-auto mt-[1rem] grid-cols-[repeat(4,9rem)] place-items-center gap-y-[2rem] gap-x-8">
         {
 
-          cardsArray.map((item) => (
-            <Card
-              item={item}
-              key={item.id}
-              handleSelectedCards={handleSelectedCards}
-              toggled={
-                item === firstCard ||
-                item === secondCard ||
-                item.matched === true
-              }
-              stopFlip={stopFlip}
-            />
-          ))
+          drinksArray.map((item) => {
+            console.log(item);
+            return (
+              item !== undefined && <Card
+                item={item}
+                key={item.id}
+                handleSelectedCards={handleSelectedCards}
+                toggled={
+                  item === firstCard ||
+                  item === secondCard ||
+                  item.matched === true
+                }
+                stopFlip={stopFlip}
+              />
+            )
+          })
         }
       </div>) : (<div className=" mx-[10px] flex flex-col items-center justify-center rounded-lg min-h-[50vh] text-white p-4">
         <div className="text-center">
