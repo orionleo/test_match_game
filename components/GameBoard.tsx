@@ -10,6 +10,7 @@ interface Item {
   matched: boolean;
 }
 function GameBoard() {
+  //All the variables/states needed/maintained
   const [cardsArray, setCardsArray] = useState<typeof Data>([]);
   const [moves, setMoves] = useState(0);
   const [firstCard, setFirstCard] = useState<Item | null>(null);
@@ -33,6 +34,7 @@ function GameBoard() {
     }, 500)
   }
 
+  //all the functions needed
   function handleSelectedCards(item: Item) {
     if (moves === 0 && firstCard === null) {
 
@@ -44,17 +46,24 @@ function GameBoard() {
       setFirstCard(item);
     }
   }
+  function removeSelection() {
+    setFirstCard(null);
+    setSecondCard(null);
+    setStopFlip(false);
+    setMoves((prevValue) => prevValue + 1);
+  }
 
+  //All the useEffects needed
   useEffect(() => {
     if (firstCard && secondCard) {
       setStopFlip(true);
       if (firstCard.name === secondCard.name) {
         setCardsArray((prevArray) => {
-          return prevArray.map((unit) => {
-            if (unit.name === firstCard.name) {
-              return { ...unit, matched: true };
+          return prevArray.map((card) => {
+            if (card.name === firstCard.name) {
+              return { ...card, matched: true };
             } else {
-              return unit;
+              return card;
             }
           });
         });
@@ -87,12 +96,6 @@ function GameBoard() {
       clearInterval(intervalId);
     };
   }, [timer, won]);
-  function removeSelection() {
-    setFirstCard(null);
-    setSecondCard(null);
-    setStopFlip(false);
-    setMoves((prevValue) => prevValue + 1);
-  }
 
   useEffect(() => {
     NewGame();
