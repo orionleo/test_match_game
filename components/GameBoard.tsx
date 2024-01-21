@@ -35,7 +35,7 @@ function GameBoard() {
 
   function handleSelectedCards(item: Item) {
     if (moves === 0 && firstCard === null) {
-      console.log("Calling function")
+
       setTimer(0);
     }
     if (firstCard !== null && firstCard.id !== item.id) {
@@ -87,7 +87,6 @@ function GameBoard() {
       clearInterval(intervalId);
     };
   }, [timer, won]);
-  console.log(timer);
   function removeSelection() {
     setFirstCard(null);
     setSecondCard(null);
