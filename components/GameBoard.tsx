@@ -123,7 +123,6 @@ function GameBoard() {
         {
 
           drinksArray.map((item) => {
-            console.log(item);
             return (
               item !== undefined && <Card
                 item={item}
