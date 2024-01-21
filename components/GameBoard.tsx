@@ -33,9 +33,9 @@ function GameBoard() {
       setSecondCard(null);
       setWon(0);
       setTimer(-1);
-
+      
     } catch (error) {
-
+      setDrinksArray([]);
     }
     finally {
       setTimeout(() => {
