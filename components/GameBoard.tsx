@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
-import Data from "@/data"
 import axios from "axios";
 
 interface Drink {
@@ -22,20 +21,28 @@ function GameBoard() {
   const [loading, setLoading] = useState(true);
 
   async function NewGame() {
-    setLoading(true);
-    const res = await axios.get('/api/fetchData')
-    const data = res.data.data as Drink[]
-    const randomOrderArray = data.sort(() => 0.5 - Math.random());
-    // const randomOrderArray = Data.sort(() => 0.5 - Math.random());
-    setDrinksArray(randomOrderArray);
-    setMoves(0);
-    setFirstCard(null);
-    setSecondCard(null);
-    setWon(0);
-    setTimer(-1);
-    setTimeout(() => {
-      setLoading(false);
-    }, 500)
+    try {
+      setLoading(true);
+      const res = await axios.get('/api/fetchData')
+      const data = res.data.data as Drink[]
+      const randomOrderArray = data.sort(() => 0.5 - Math.random());
+      // const randomOrderArray = Data.sort(() => 0.5 - Math.random());
+      setDrinksArray(randomOrderArray);
+      setMoves(0);
+      setFirstCard(null);
+      setSecondCard(null);
+      setWon(0);
+      setTimer(-1);
+
+    } catch (error) {
+
+    }
+    finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 500)
+    }
+
   }
 
   //all the functions needed
@@ -60,7 +67,6 @@ function GameBoard() {
   //All the useEffects needed
 
   useEffect(() => {
-
     NewGame();
   }, []);
 
